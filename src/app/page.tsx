@@ -1,11 +1,11 @@
 "use client";
-import Image from "next/image";
 import { useState } from "react";
+import { fetchAPI } from "@/lib/utils";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const handleBackendConnection = async () => {
-    const response: Response = await fetch("http://localhost:5000/express");
+    const response: Response = await fetchAPI(`/express`);
     const responseJson = await response.json();
     console.log("[Response] : ", responseJson.message);
     setMessage(responseJson.message);
