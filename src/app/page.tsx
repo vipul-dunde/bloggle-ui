@@ -60,7 +60,9 @@ const Home = () => {
                       <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 mb-4">{post.content}</p>
+                      <p className="text-gray-700 mb-4">
+                        {post.content.slice(0, 90) + "..."}
+                      </p>
                     </CardContent>
                     <CardFooter className="p-0">
                       <Link href={`/post/${post.id}`}>
