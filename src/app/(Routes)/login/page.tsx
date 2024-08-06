@@ -1,10 +1,11 @@
-const Login = () => {
+import Login from "@/components/Login";
+
+const pageLogin = () => {
   return (
     <div>
-      <h1>Login</h1>
-      <a href="/signup">SignUp</a>
+      <Login />
     </div>
   );
 };
 
-export default Login;
+export default pageLogin;
