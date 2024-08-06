@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 import axios from "axios";
 
 type Post = {

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 import { isAuthenticated } from "@/components/Login";
 import axios from "axios";
 import Link from "next/link";

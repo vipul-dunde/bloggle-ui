@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const Navbar = ({ setLogOut }) => {
+type NavbarProps = {
+  setLogOut: boolean;
+};
+const Navbar: React.FC<NavbarProps> = ({ setLogOut }) => {
   const router = useRouter();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -15,7 +18,7 @@ const Navbar = ({ setLogOut }) => {
         <div className="text-4xl font-extrabold">
           <Link href="/">Bloggle</Link>
         </div>
-        {!setLogOut ? (
+        {(!setLogOut as boolean) ? (
           <div className="space-x-4">
             <Link href="/login">
               <Button variant="outline">Log In</Button>

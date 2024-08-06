@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 
 const Login = () => {

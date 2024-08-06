@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import NavBar from "@/components/NavBar";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
