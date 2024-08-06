@@ -61,7 +61,7 @@ const Home = () => {
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-700 mb-4">
-                        {post.content.slice(0, 90) + "..."}
+                        {post.content.slice(0, 130) + "..."}
                       </p>
                     </CardContent>
                     <CardFooter className="p-0">
