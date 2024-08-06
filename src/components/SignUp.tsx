@@ -47,7 +47,7 @@ const Signup = () => {
   };
   return (
     <div>
-      <NavBar />
+      <Navbar setLogOut={false} />
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <div className="bg-white p-8 rounded shadow-lg max-w-md w-full ">
           <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>

@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar setLogOut={false} />
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <div className="bg-white p-8 rounded shadow-lg max-w-md w-full">
           <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -77,7 +77,7 @@ const Login = () => {
           </form>
           <div className="mt-4 text-center">
             <a href="/signup" className="text-sm text-blue-600 hover:underline">
-              Don't have an account? Sign up
+              Dont have an account? Sign up
             </a>
           </div>
         </div>

@@ -37,7 +37,7 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar setLogOut={false} />
       <div className="container mx-auto p-6">
         <div className="flex justify-center">
           <div className="w-full max-w-3xl">
