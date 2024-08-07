@@ -42,19 +42,21 @@ const Home = () => {
         {posts.map((post) => (
           <Card
             key={post.id}
-            className="shadow-sm flex flex-col md:flex-row h-[350px] mb-4"
+            className="shadow-sm flex flex-col md:flex-row h-auto md:h-[350px] mb-4"
           >
-            <div className="md:w-1/2">
+            <div className="w-full md:w-1/2">
               <img
                 src={post.imageURL}
                 alt={post.title}
                 className="object-cover w-full"
-                style={{ height: "350px" }}
+                style={{ height: "auto", maxHeight: "350px" }}
               />
             </div>
-            <div className="md:w-1/2 p-4">
+            <div className="w-full md:w-1/2 p-4">
               <CardHeader>
-                <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+                <h2 className="text-xl md:text-2xl font-bold mb-2">
+                  {post.title}
+                </h2>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 mb-4">

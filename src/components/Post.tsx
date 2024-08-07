@@ -85,7 +85,7 @@ const Post: React.FC<PostProps> = ({ pageId }) => {
       <Navbar setLogOut={false} />
       <div className="container mx-auto p-6">
         <div className="flex justify-center">
-          <div className="w-full max-w-3xl">
+          <div className="w-full max-w-2xl">
             <Card className="shadow-md">
               <CardHeader>
                 <CardTitle className="text-3xl font-bold mb-4">

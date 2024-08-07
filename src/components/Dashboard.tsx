@@ -72,39 +72,39 @@ const Dashboard = () => {
   return (
     <div>
       <Navbar setLogOut={true} />
-      <div>
-        <div className="container mx-auto p-8 mt-5">
-          {posts.map((post) => (
-            <Card
-              key={post.id}
-              className="shadow-sm flex flex-col md:flex-row h-[350px] mb-4"
-            >
-              <div className="md:w-1/2">
-                <img
-                  src={post.imageURL}
-                  alt={post.title}
-                  className="object-cover w-full"
-                  style={{ height: "350px" }}
-                />
-              </div>
-              <div className="md:w-1/2 p-4">
-                <CardHeader>
-                  <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 mb-4">
-                    {post.content.slice(0, 270) + "..."}
-                  </p>
-                </CardContent>
-                <CardFooter className="p-0 justify-end">
-                  <Link href={`/blog/${post.id}?canDelete=true`}>
-                    <Button className="mx-6 mt-2">Read more</Button>
-                  </Link>
-                </CardFooter>
-              </div>
-            </Card>
-          ))}
-        </div>
+      <div className="container mx-auto p-8 mt-5">
+        {posts.map((post) => (
+          <Card
+            key={post.id}
+            className="shadow-sm flex flex-col md:flex-row h-auto md:h-[350px] mb-4"
+          >
+            <div className="w-full md:w-1/2">
+              <img
+                src={post.imageURL}
+                alt={post.title}
+                className="object-cover w-full"
+                style={{ height: "auto", maxHeight: "350px" }}
+              />
+            </div>
+            <div className="w-full md:w-1/2 p-4">
+              <CardHeader>
+                <h2 className="text-xl md:text-2xl font-bold mb-2">
+                  {post.title}
+                </h2>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700 mb-4">
+                  {post.content.slice(0, 270) + "..."}
+                </p>
+              </CardContent>
+              <CardFooter className="p-0">
+                <Link href={`/blog/${post.id}?canDelete=true`}>
+                  <Button className="mx-6 mt-2">Read more</Button>
+                </Link>
+              </CardFooter>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
   );
