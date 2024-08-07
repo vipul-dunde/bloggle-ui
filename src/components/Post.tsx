@@ -21,7 +21,11 @@ type Post = {
   excerpt: string;
 };
 
-const Post = ({ pageId }) => {
+interface PostProps {
+  pageId: string;
+}
+
+const Post: React.FC<PostProps> = ({ pageId }) => {
   console.log(pageId);
   const [post, setPost] = useState<Post | null>(null);
   const router = useRouter();
