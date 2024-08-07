@@ -10,10 +10,8 @@ import {
 import Navbar from "@/components/Navbar";
 import { isAuthenticated } from "@/components/Login";
 import axios from "axios";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-``;
 
 type Post = {
   id: number;

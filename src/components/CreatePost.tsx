@@ -32,7 +32,7 @@ const CreatePost = () => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     };
-    const token: string = localStorage.getItem("token");
+    const token: string = localStorage.getItem("token") as string;
     if (!token) {
       router.push("/login");
     }
