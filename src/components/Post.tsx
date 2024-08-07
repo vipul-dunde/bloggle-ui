@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import axios from "axios";
+import { isAuthenticated } from "@/components/Login";
 
 type Post = {
   id: number;
@@ -19,6 +20,7 @@ type Post = {
   content: string;
   authorId: number;
   excerpt: string;
+  imageURL: string;
 };
 
 interface PostProps {
@@ -28,6 +30,7 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ pageId }) => {
   const [post, setPost] = useState<Post | null>(null);
   const router = useRouter();
+  const [canDelete, setCanDelete] = useState(false);
   const id = pageId;
   const getPostById = async (postId: string | string[] | undefined) => {
     if (postId) {
@@ -35,19 +38,47 @@ const Post: React.FC<PostProps> = ({ pageId }) => {
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/feed/getPostById/${postId}`,
       );
       setPost(response.data);
-      console.log("Post: ", response.data);
+    }
+  };
+
+  const getAuthenticity = async () => {
+    const auth = await isAuthenticated();
+    if (!auth) {
+      setCanDelete(false);
     }
   };
 
   useEffect(() => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const params = new URLSearchParams(url.search);
+    const queryParam: string | null = params.get("canDelete");
+
     if (id) {
       getPostById(id);
     }
+
+    if (queryParam && queryParam === "true") {
+      setCanDelete(true);
+    }
+    getAuthenticity();
   }, [id]);
 
   if (!post) {
     return <div>Loading...</div>;
   }
+
+  const handleDeletePost = async (id: number | undefined) => {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    };
+    await axios.delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/deletePost/${id}`,
+      { headers },
+    );
+    router.push("/dashboard");
+  };
 
   return (
     <div>
@@ -62,7 +93,7 @@ const Post: React.FC<PostProps> = ({ pageId }) => {
                 </CardTitle>
               </CardHeader>
               <img
-                src="https://via.placeholder.com/800x400.png?text=Sample+Image"
+                src={post.imageURL}
                 alt={post.title}
                 className="object-cover w-full h-64 mb-6 rounded-lg"
               />
@@ -78,9 +109,14 @@ const Post: React.FC<PostProps> = ({ pageId }) => {
                 >
                   Go Back
                 </Button>
-                <p className="text-sm text-gray-500">
-                  Author ID: {post.authorId}
-                </p>
+                {canDelete && (
+                  <Button
+                    onClick={() => handleDeletePost(post?.id)}
+                    className="cursor-pointer p-2 rounded-md hover:bg-red-600"
+                  >
+                    Delete Blog
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           </div>

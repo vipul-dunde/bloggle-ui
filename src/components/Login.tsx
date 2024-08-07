@@ -7,13 +7,15 @@ import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
+  const [authenticated, setAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated()) {
+    getAuthenticity();
+    if (authenticated) {
       router.push("/dashboard");
     }
   }, []);
@@ -21,6 +23,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    console.log(email, password);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/login`,
@@ -33,20 +36,27 @@ const Login = () => {
         },
       );
 
+      console.log("Response: ", response.ok);
+
       if (!response.ok) {
-        throw new Error("Login failed");
+        localStorage.removeItem("token");
+        router.push("/login");
+        throw new Error("Session expired. Please login again.");
       }
 
       const data = await response.json();
       const { token, username } = data;
-      // Store the JWT token in localStorage
       localStorage.setItem("token", token);
-      // Redirect to the dashboard
       router.push("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
       setError("Invalid email or password");
     }
+  };
+
+  const getAuthenticity = async () => {
+    const auth = await isAuthenticated();
+    setAuthenticated(auth);
   };
 
   return (
@@ -92,9 +102,29 @@ const Login = () => {
   );
 };
 
-export const isAuthenticated = () => {
-  const token = localStorage.getItem("token");
-  return token !== null;
+export const isAuthenticated = async () => {
+  const token: string = localStorage.getItem("token") as string;
+  if (token != null) {
+    const verifyTokenResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/verify-token`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    console.log("Verify Token Response: ", verifyTokenResponse.ok);
+    if (!verifyTokenResponse.ok) {
+      localStorage.removeItem("token");
+      return false;
+    }
+  } else {
+    return false;
+  }
+
+  return true;
 };
 
 export default Login;

@@ -1,19 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import Navbar from "@/components/Navbar";
 import { isAuthenticated } from "@/components/Login";
 import axios from "axios";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 ``;
 
 type Post = {
@@ -21,20 +20,25 @@ type Post = {
   title: string;
   content: string;
   authorId: number;
+  imageURL: string;
   excerpt: string;
 };
 
 const Dashboard = () => {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const [posts, setPosts] = React.useState<Post[]>([]);
 
-  useEffect(() => {
-    if (!isAuthenticated()) {
+  const getAuthenticity = async () => {
+    const auth = await isAuthenticated();
+    if (!auth) {
       router.push("/login");
     }
-  }, [router]);
+    getAllPages();
+  };
+
+  useEffect(() => {
+    getAuthenticity();
+  }, []);
 
   const getAllPages = async () => {
     const headers = {
@@ -47,28 +51,14 @@ const Dashboard = () => {
       { authorId: 1 },
       { headers },
     );
+
+    console.log("Response: ", createResponse.status);
+    if (!(createResponse.status === 200)) {
+      throw new Error("Session expired. Please login again.");
+      localStorage.removeItem("token");
+      // router.push("/login");
+    }
     setPosts(createResponse.data);
-  };
-
-  useEffect(() => {
-    getAllPages();
-  }, []);
-
-  const handleCreatePost = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    };
-    const newPost = { authorId: 1, title, content };
-    const createPostResponse = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/createPost`,
-      newPost,
-      { headers },
-    );
-    setPosts([...posts, createPostResponse.data]);
-    setTitle("");
-    setContent("");
   };
 
   const handleDeletePost = async (id: number) => {
@@ -76,7 +66,7 @@ const Dashboard = () => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     };
-    const createResponse = await axios.delete(
+    await axios.delete(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/deletePost/${id}`,
       { headers },
     );
@@ -86,36 +76,38 @@ const Dashboard = () => {
   return (
     <div>
       <Navbar setLogOut={true} />
-      <div className="container mx-auto p-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Posts</h2>
-          {posts.length === 0 ? (
-            <p className="text-gray-600">No posts yet. Start creating!</p>
-          ) : (
-            posts.map((post) => (
-              <Card
-                key={post.id}
-                className="mb-6 shadow-md rounded-lg overflow-hidden"
-              >
-                <CardHeader className="bg-gray-50 p-4">
-                  <h3 className="text-xl font-bold text-gray-800">
-                    {post.title}
-                  </h3>
+      <div>
+        <div className="container mx-auto p-8 mt-5">
+          {posts.map((post) => (
+            <Card
+              key={post.id}
+              className="shadow-sm flex flex-col md:flex-row h-[350px] mb-4"
+            >
+              <div className="md:w-1/2">
+                <img
+                  src={post.imageURL}
+                  alt={post.title}
+                  className="object-cover w-full"
+                  style={{ height: "350px" }}
+                />
+              </div>
+              <div className="md:w-1/2 p-4">
+                <CardHeader>
+                  <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
                 </CardHeader>
-                <CardContent className="p-4">
-                  <p className="text-gray-700">{post.content}</p>
+                <CardContent>
+                  <p className="text-gray-700 mb-4">
+                    {post.content.slice(0, 270) + "..."}
+                  </p>
                 </CardContent>
-                <CardFooter className="p-4 flex justify-end">
-                  <Badge
-                    onClick={() => handleDeletePost(post.id)}
-                    className="cursor-pointer p-2 rounded-md hover:bg-red-600"
-                  >
-                    Delete Blog
-                  </Badge>
+                <CardFooter className="p-0 justify-end">
+                  <Link href={`/blog/${post.id}?canDelete=true`}>
+                    <Button className="mx-6 mt-2">Read more</Button>
+                  </Link>
                 </CardFooter>
-              </Card>
-            ))
-          )}
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
     </div>

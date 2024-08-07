@@ -17,6 +17,7 @@ type Post = {
   title: string;
   content: string;
   authorId: number;
+  imageURL: string;
   excerpt: string;
 };
 
@@ -45,7 +46,7 @@ const Home = () => {
           >
             <div className="md:w-1/2">
               <img
-                src="https://via.placeholder.com/500x250.png?text=Sample+Image"
+                src={post.imageURL}
                 alt={post.title}
                 className="object-cover w-full"
                 style={{ height: "350px" }}
