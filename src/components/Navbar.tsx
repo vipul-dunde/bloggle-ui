@@ -13,7 +13,7 @@ const Navbar: React.FC<NavbarProps> = ({ setLogOut }) => {
     router.push("/");
   };
   return (
-    <nav className="bg-white shadow p-8 sticky top-0 z-50">
+    <nav className="bg-white p-8 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-4xl font-extrabold">
           <Link href="/">Bloggle</Link>

@@ -89,36 +89,45 @@ const Dashboard = () => {
     <div>
       <Navbar setLogOut={true} />
       <div className="container mx-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-extrabold text-gray-900">Dashboard</h1>
+          <Button className="ml-auto">New Post</Button>
         </div>
-        <Card className="mb-8">
+
+        <Card className="mb-12 shadow-lg rounded-lg overflow-hidden">
           <CardHeader>
-            <h2 className="text-2xl">Create New Blog</h2>
+            <h2 className="text-2xl font-bold">Create New Blog</h2>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             <form onSubmit={handleCreatePost}>
-              <div className="mb-4">
-                <label className="block text-gray-700">Title</label>
+              <div className="mb-6">
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Title
+                </label>
                 <Input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-500"
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Content</label>
+              <div className="mb-6">
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Content
+                </label>
                 <Textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full"
-                  rows={5}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-500"
+                  rows={6}
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-14 py-4 rounded-md hover:bg-blue-700"
+              >
                 Post
               </Button>
             </form>
@@ -126,20 +135,28 @@ const Dashboard = () => {
         </Card>
 
         <div>
-          <h2 className="text-2xl font-bold mb-4">Your Posts</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Posts</h2>
           {posts.length === 0 ? (
-            <p>No posts yet.</p>
+            <p className="text-gray-600">No posts yet. Start creating!</p>
           ) : (
             posts.map((post) => (
-              <Card key={post.id} className="mb-4">
-                <CardHeader>
-                  <h3 className="text-xl font-bold">{post.title}</h3>
+              <Card
+                key={post.id}
+                className="mb-6 shadow-md rounded-lg overflow-hidden"
+              >
+                <CardHeader className="bg-gray-50 p-4">
+                  <h3 className="text-xl font-bold text-gray-800">
+                    {post.title}
+                  </h3>
                 </CardHeader>
-                <CardContent>
-                  <p>{post.content}</p>
+                <CardContent className="p-4">
+                  <p className="text-gray-700">{post.content}</p>
                 </CardContent>
-                <CardFooter className="p-2">
-                  <Badge onClick={() => handleDeletePost(post.id)}>
+                <CardFooter className="p-4 flex justify-end">
+                  <Badge
+                    onClick={() => handleDeletePost(post.id)}
+                    className="cursor-pointer p-2 rounded-md hover:bg-red-600"
+                  >
                     Delete Blog
                   </Badge>
                 </CardFooter>

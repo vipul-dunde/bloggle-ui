@@ -28,7 +28,6 @@ const Home = () => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/feed/getAllPosts`,
     );
     setPosts(response.data);
-    console.log("Posts: ", posts);
   };
 
   useEffect(() => {
@@ -65,7 +64,7 @@ const Home = () => {
                       </p>
                     </CardContent>
                     <CardFooter className="p-0">
-                      <Link href={`/post/${post.id}`}>
+                      <Link href={`/blog/${post.id}`}>
                         <Button>Read more</Button>
                       </Link>
                     </CardFooter>
