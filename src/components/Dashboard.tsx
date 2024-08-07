@@ -1,4 +1,5 @@
-"use client";
+"use client"; // Ensure this component is rendered on the client side
+
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -8,7 +9,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
-import { isAuthenticated } from "@/components/Login";
+import { isAuthenticated } from "@/components/Login"; // Import authentication check function
 import axios from "axios";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -22,51 +23,71 @@ type Post = {
   excerpt: string;
 };
 
+// Client-side Dashboard component
 const Dashboard = () => {
-  const router = useRouter();
-  const [posts, setPosts] = React.useState<Post[]>([]);
+  const router = useRouter(); // For client-side navigation
+  const [posts, setPosts] = useState<Post[]>([]); // State to manage posts
 
+  // Check if the user is authenticated and fetch posts
   const getAuthenticity = async () => {
     const auth = await isAuthenticated();
     if (!auth) {
+      // Redirect to login if not authenticated
       router.push("/login");
+    } else {
+      // Fetch posts if authenticated
+      getAllPages();
     }
-    getAllPages();
   };
 
   useEffect(() => {
-    getAuthenticity();
+    getAuthenticity(); // Check authentication and fetch posts on mount
   }, []);
 
+  // Fetch posts from the backend
   const getAllPages = async () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     };
 
-    const createResponse = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/getAuthorPosts`,
-      { token: localStorage.getItem("token") },
-      { headers },
-    );
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/getAuthorPosts`,
+        { token: localStorage.getItem("token") },
+        { headers },
+      );
 
-    if (!(createResponse.status === 200)) {
-      localStorage.removeItem("token");
-      throw new Error("Session expired. Please login again.");
+      if (response.status === 200) {
+        setPosts(response.data); // Set posts if the response is successful
+      } else {
+        // Handle unauthorized access
+        localStorage.removeItem("token");
+        throw new Error("Session expired. Please login again.");
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      localStorage.removeItem("token"); // Ensure token is removed on error
+      router.push("/login"); // Redirect to login on error
     }
-    setPosts(createResponse.data);
   };
 
+  // Delete a post
   const handleDeletePost = async (id: number) => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     };
-    await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/deletePost/${id}`,
-      { headers },
-    );
-    setPosts(posts.filter((post) => post.id !== id));
+
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/deletePost/${id}`,
+        { headers },
+      );
+      setPosts(posts.filter((post) => post.id !== id)); // Remove post from state
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
   return (

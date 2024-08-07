@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Ensure this component is rendered on the client side
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -6,25 +6,34 @@ import { Input } from "@/components/ui/input";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 
+// Client-side Login component
 const Login = () => {
-  const router = useRouter();
-  const [authenticated, setAuthenticated] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const router = useRouter(); // For client-side navigation
+  const [authenticated, setAuthenticated] = useState(false); // State to manage authentication status
+  const [email, setEmail] = useState(""); // State to manage email input
+  const [password, setPassword] = useState(""); // State to manage password input
+  const [error, setError] = useState(""); // State to manage error messages
 
   useEffect(() => {
-    getAuthenticity();
-    if (authenticated) {
-      router.push("/dashboard");
-    }
-  }, []);
+    // Check if the user is already authenticated
+    const checkAuth = async () => {
+      const auth = await isAuthenticated();
+      setAuthenticated(auth);
+      if (auth) {
+        // Redirect to dashboard if already authenticated
+        router.push("/dashboard");
+      }
+    };
 
+    checkAuth(); // Call checkAuth on component mount
+  }, [router]);
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    console.log(email, password);
+    setError(""); // Reset error state
     try {
+      // Make a POST request to authenticate the user
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/login`,
         {
@@ -36,27 +45,22 @@ const Login = () => {
         },
       );
 
-      console.log("Response: ", response.ok);
-
+      // Handle unsuccessful authentication
       if (!response.ok) {
         localStorage.removeItem("token");
         router.push("/login");
         throw new Error("Session expired. Please login again.");
       }
 
+      // Handle successful authentication
       const data = await response.json();
-      const { token, username } = data;
+      const { token } = data;
       localStorage.setItem("token", token);
       router.push("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
-      setError("Invalid email or password");
+      setError("Invalid email or password"); // Set error message for invalid credentials
     }
-  };
-
-  const getAuthenticity = async () => {
-    const auth = await isAuthenticated();
-    setAuthenticated(auth);
   };
 
   return (
@@ -93,7 +97,7 @@ const Login = () => {
           </form>
           <div className="mt-4 text-center">
             <a href="/signup" className="text-sm text-blue-600 hover:underline">
-              Dont have an account? Sign up
+              Don't have an account? Sign up
             </a>
           </div>
         </div>
@@ -102,9 +106,11 @@ const Login = () => {
   );
 };
 
+// Function to check if the user is authenticated
 export const isAuthenticated = async () => {
-  const token: string = localStorage.getItem("token") as string;
-  if (token != null) {
+  const token = localStorage.getItem("token"); // Get token from localStorage
+  if (token) {
+    // Verify token with the backend
     const verifyTokenResponse = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/verify-token`,
       {
@@ -115,16 +121,16 @@ export const isAuthenticated = async () => {
         },
       },
     );
-    console.log("Verify Token Response: ", verifyTokenResponse.ok);
+
+    // Handle token verification response
     if (!verifyTokenResponse.ok) {
       localStorage.removeItem("token");
       return false;
     }
+    return true;
   } else {
     return false;
   }
-
-  return true;
 };
 
 export default Login;
