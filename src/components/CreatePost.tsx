@@ -32,7 +32,11 @@ const CreatePost = () => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     };
-    const newPost = { authorId: 1, title, content, imageUrl };
+    const token: string = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+    }
+    const newPost = { authorId: 1, title, content, imageUrl, token: token };
     const createPostResponse = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/createPost`,
       newPost,

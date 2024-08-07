@@ -48,15 +48,13 @@ const Dashboard = () => {
 
     const createResponse = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/getAuthorPosts`,
-      { authorId: 1 },
+      { token: localStorage.getItem("token") },
       { headers },
     );
 
-    console.log("Response: ", createResponse.status);
     if (!(createResponse.status === 200)) {
-      throw new Error("Session expired. Please login again.");
       localStorage.removeItem("token");
-      // router.push("/login");
+      throw new Error("Session expired. Please login again.");
     }
     setPosts(createResponse.data);
   };
