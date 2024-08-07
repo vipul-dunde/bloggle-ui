@@ -26,7 +26,6 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ pageId }) => {
-  console.log(pageId);
   const [post, setPost] = useState<Post | null>(null);
   const router = useRouter();
   const id = pageId;

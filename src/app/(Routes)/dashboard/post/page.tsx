@@ -1,11 +1,11 @@
 "use server";
 
-import Dashboard from "@/components/Dashboard";
+import CreatePost from "@/components/CreatePost";
 
 const pageDashboard = () => {
   return (
     <div>
-      <Dashboard />
+      <CreatePost />
     </div>
   );
 };
