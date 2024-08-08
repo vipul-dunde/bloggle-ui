@@ -20,7 +20,6 @@ const Login = () => {
       const auth = await isAuthenticated();
       setAuthenticated(auth);
       if (auth) {
-        // Redirect to dashboard if already authenticated
         router.push("/dashboard");
       }
     };

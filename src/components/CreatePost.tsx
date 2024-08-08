@@ -62,9 +62,6 @@ const CreatePost = () => {
       clearTimeout(id); // Clear timeout on success
       return response;
     } catch (error) {
-      if (error.name === "AbortError") {
-        throw new Error("Request timed out");
-      }
       throw error;
     }
   };
