@@ -10,6 +10,10 @@
 5. Using JWT token for authentication, verification and session management.
 6. Using AppDirect AI for Enhancing blog content or Generate content.
 
+## AI Enabled Features:
+### Deployed Project With AI Enabled: [Bloggle Next JS Frontend Service](https://bloggle-ui.onrender.com/)
+Deployed on Render as it does not have api response time limitation.
+
 ### Ui Deployed at: [Bloggle Next JS Frontend Service](https://bloggle-puce.vercel.app/)
 ### GIT Repository: [Bloggle Next JS Frontend Service GIT Repository](https://github.com/vipulappdirect/bloggle-ui)
 
