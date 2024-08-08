@@ -13,7 +13,7 @@ export function UsernameInfo() {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Button variant="link" className="text-md text-red-500">
+        <Button variant="link" className="text-lg text-yellow-600 font-bold">
           {localStorage.getItem("username")}
         </Button>
       </HoverCardTrigger>
