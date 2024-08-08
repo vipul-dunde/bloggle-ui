@@ -46,20 +46,48 @@ const CreatePost = () => {
     router.push(`/dashboard`);
   };
 
+  const fetchWithTimeout = async (
+    url: string,
+    options: RequestInit,
+    timeout: number,
+  ) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      clearTimeout(id); // Clear timeout on success
+      return response;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error("Request timed out");
+      }
+      throw error;
+    }
+  };
+
   const handleAIEnhance = async (content: string, title: string) => {
     setDisableAI(true);
     console.log("Enhancing Content with AI");
     const newPost = { title, content };
-    const aiResponse = await fetch(`/api/v1/ai/enhance`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const aiResponse = await fetchWithTimeout(
+      `/api/v1/ai/enhance`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPost),
       },
-      body: JSON.stringify(newPost),
-    });
+      30000,
+    );
     const { enhancedContent } = await aiResponse.json();
     console.log("Response from AI", enhancedContent);
     setContent(enhancedContent);
+    setDisableAI(false);
   };
 
   useEffect(() => {
