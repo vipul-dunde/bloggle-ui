@@ -116,6 +116,11 @@ const CreatePost = () => {
                 </label>
                 <Textarea
                   value={content}
+                  placeholder={
+                    content.length === 0
+                      ? "Write Content or Prompt for AI to Generate Content"
+                      : "Click AI Content to Enhance Content"
+                  }
                   onChange={(e) => setContent(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-500"
                   rows={10}
