@@ -63,9 +63,10 @@ const Signup = () => {
       }
 
       const data = await response.json();
-      const { token } = data;
+      const { token, username } = data;
       // Store the JWT token in localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
       router.push("/dashboard");
     } catch (err) {
       console.error("SignUp error:", err);

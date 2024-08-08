@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { UsernameInfo } from "@/components/UsernameInfo";
 
 type NavbarProps = {
   setLogOut: boolean;
@@ -44,6 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ setLogOut }) => {
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
             {window.location.pathname === "/dashboard" ? (
               <>
+                <UsernameInfo />
                 <Link href="/dashboard/post">
                   <Button>Create New Post</Button>{" "}
                   {/* Link to create new post */}

@@ -54,8 +54,10 @@ const Login = () => {
 
       // Handle successful authentication
       const data = await response.json();
-      const { token } = data;
+      const { token, username } = data;
       localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+
       router.push("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
@@ -127,6 +129,10 @@ export const isAuthenticated = async () => {
       localStorage.removeItem("token");
       return false;
     }
+
+    const data = await verifyTokenResponse.json();
+    const { username } = data;
+    localStorage.setItem("username", username);
     return true;
   } else {
     return false;
