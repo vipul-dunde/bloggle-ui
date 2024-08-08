@@ -1,6 +1,14 @@
 # Bloggle UI | NextJS | Setup and Execution
 ## Next.js Project with App Directory
 
+## Overview:
+
+1. Bloggle UI built with NextJs and connects with Bloggle Backend Service for Authentication and Blog Management.
+2. Learnt and Applied **Shadcn** for components.
+3. Home page and few more pages rendered statically.
+4. Used **SWR** for fetching data.
+5. Using JWT token for authentication, verification and session management.
+6. Using AppDirect AI for Enhancing blog content or Generate content.
 
 ### Ui Deployed at: [Bloggle Next JS Frontend Service](https://bloggle-puce.vercel.app/)
 ### GIT Repository: [Bloggle Next JS Frontend Service GIT Repository](https://github.com/vipulappdirect/bloggle-ui)
