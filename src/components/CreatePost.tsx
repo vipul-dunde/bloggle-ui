@@ -74,9 +74,15 @@ const CreatePost = () => {
     <div>
       <Navbar setLogOut={true} />
       <div className="container mx-auto p-6">
-        <Card className="mb-12 shadow-md rounded-sm overflow-hidden w-[70%] mx-auto h-[650px] mt-5">
+        <Card className="mb-12 shadow-md rounded-sm overflow-hidden w-[70%] mx-auto h-[700px] mt-5">
           <CardHeader>
-            <h2 className="text-2xl font-bold">Create New Blog</h2>
+            <h2 className="text-2xl font-bold">
+              Create New Blog
+              <p className="text-sm font-light">
+                Give Title, Some Content, Hit <strong>AI Content</strong>. Let
+                AI do the Job for you!!
+              </p>
+            </h2>
           </CardHeader>
           <CardContent className="p-6">
             <form onSubmit={handleCreatePost}>
