@@ -94,38 +94,51 @@ const Dashboard = () => {
     <div>
       <Navbar setLogOut={true} />
       <div className="container mx-auto p-8 mt-5">
-        {posts.map((post) => (
-          <Card
-            key={post.id}
-            className="shadow-sm flex flex-col md:flex-row h-auto md:h-[350px] mb-4"
-          >
-            <div className="w-full md:w-1/2">
-              <img
-                src={post.imageURL}
-                alt={post.title}
-                className="object-cover w-full"
-                style={{ height: "auto", maxHeight: "350px" }}
-              />
-            </div>
-            <div className="w-full md:w-1/2 p-4">
-              <CardHeader>
-                <h2 className="text-xl md:text-2xl font-bold mb-2">
-                  {post.title}
-                </h2>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 mb-4">
-                  {post.content.slice(0, 270) + "..."}
-                </p>
-              </CardContent>
-              <CardFooter className="p-0">
-                <Link href={`/blog/${post.id}?canDelete=true`}>
-                  <Button className="mx-6 mt-2">Read more</Button>
-                </Link>
-              </CardFooter>
-            </div>
-          </Card>
-        ))}
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <Card
+              key={post.id}
+              className="shadow-sm flex flex-col md:flex-row h-auto md:h-[350px] mb-4"
+            >
+              <div className="w-full md:w-1/2">
+                <img
+                  src={post.imageURL}
+                  alt={post.title}
+                  className="object-cover w-full"
+                  style={{ height: "auto", maxHeight: "350px" }}
+                />
+              </div>
+              <div className="w-full md:w-1/2 p-4">
+                <CardHeader>
+                  <h2 className="text-xl md:text-2xl font-bold mb-2">
+                    {post.title}
+                  </h2>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700 mb-4">
+                    {post.content.slice(0, 270) + "..."}
+                  </p>
+                </CardContent>
+                <CardFooter className="p-0">
+                  <Link href={`/blog/${post.id}?canDelete=true`}>
+                    <Button className="mx-6 mt-2">Read more</Button>
+                  </Link>
+                </CardFooter>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4">No blogs available</h2>
+            <p className="text-gray-600 mb-6">
+              It looks like there are no blogs to display. Start creating
+              content now!
+            </p>
+            <Link href="/dashboard/post">
+              <Button>Create a Blog</Button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

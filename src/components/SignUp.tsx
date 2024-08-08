@@ -13,9 +13,37 @@ const Signup = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  // Password validation function
+  const validatePassword = (password: string) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecialChar
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!validatePassword(password)) {
+      setError(
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.",
+      );
+      return;
+    }
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/signup`,
@@ -44,11 +72,12 @@ const Signup = () => {
       setError("Username Already Exists. Try Logging In.");
     }
   };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar setLogOut={false} />
       <div className="flex justify-center items-center bg-gray-50 lg:mt-4 md:mt-4 grow">
-        <div className="bg-white p-8 rounded shadow-lg max-w-md w-full ">
+        <div className="bg-white p-8 rounded shadow-lg max-w-md w-full">
           <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <form onSubmit={handleSubmit}>
