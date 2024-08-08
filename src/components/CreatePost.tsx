@@ -14,6 +14,7 @@ const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [disableAI, setDisableAI] = useState(true);
 
   const getAuthenticity = async () => {
     const auth = await isAuthenticated();
@@ -44,6 +45,30 @@ const CreatePost = () => {
     );
     router.push(`/dashboard`);
   };
+
+  const handleAIEnhance = async (content, title) => {
+    setDisableAI(true);
+    console.log("Enhancing Content with AI");
+    const newPost = { title, content };
+    const aiResponse = await fetch(`/api/v1/ai/enhance`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPost),
+    });
+    const { enhancedContent } = await aiResponse.json();
+    console.log("Response from AI", enhancedContent);
+    setContent(enhancedContent);
+  };
+
+  useEffect(() => {
+    if (content.length === 0) {
+      setDisableAI(true);
+    } else {
+      setDisableAI(false);
+    }
+  }, [content]);
 
   return (
     <div>
@@ -89,6 +114,7 @@ const CreatePost = () => {
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-500"
                   rows={10}
                   required
+                  disabled={title.length === 0}
                 />
               </div>
               <Button
@@ -96,6 +122,14 @@ const CreatePost = () => {
                 className="w-20 py-4 rounded-md hover:bg-blue-700 text-md"
               >
                 Post
+              </Button>
+              <Button
+                type="button"
+                onClick={() => handleAIEnhance(content, title)}
+                className="ml-2 w-30 py-4 rounded-md hover:bg-blue-700 text-md"
+                disabled={disableAI}
+              >
+                AI Content
               </Button>
             </form>
           </CardContent>
