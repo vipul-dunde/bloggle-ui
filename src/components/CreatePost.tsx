@@ -46,7 +46,7 @@ const CreatePost = () => {
     router.push(`/dashboard`);
   };
 
-  const handleAIEnhance = async (content, title) => {
+  const handleAIEnhance = async (content: string, title: string) => {
     setDisableAI(true);
     console.log("Enhancing Content with AI");
     const newPost = { title, content };

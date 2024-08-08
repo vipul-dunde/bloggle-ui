@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 
 async function postHandler(req: Request) {
   const { title, content } = await req.json();
-  let chatSessionId = process.env.CHAT_SESSION_ID;
-  const prompt = `Title: ${title}\nContent: ${content}\nReturn only the enhanced content as per instructions. No additional information. Strict text format only, no markdown or HTML. Ignore Previous Messages.`;
+  let chatSessionId: string = process.env.CHAT_SESSION_ID as string;
+  const prompt = `Title: ${title as string}\nContent: ${content as string}\nReturn only the enhanced content as per instructions. No additional information. Strict text format only, no markdown or HTML. Ignore Previous Messages.`;
   let response;
   try {
     response = await getResponseForPrompt(chatSessionId, prompt);
   } catch (error) {
     console.error("Error getting response from AI", error);
-    chatSessionId = await createChatSession();
+    chatSessionId = (await createChatSession()) as string;
     console.log("Created new chat session", chatSessionId);
     response = await getResponseForPrompt(chatSessionId, prompt);
   }
